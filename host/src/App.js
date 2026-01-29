@@ -3,7 +3,12 @@ import logo from './logo.svg';
 import './App.css';
 
 // Динамічний імпорт remote модуля
-const RemoteButton = React.lazy(() => import('remote/Button'));
+const RemoteButton = React.lazy(() => 
+  import('remote/Button').catch((error) => {
+    console.error('Failed to load remote module:', error);
+    return { default: () => <div>Failed to load remote button</div> };
+  })
+);
 
 function App() {
   return (
@@ -13,7 +18,7 @@ function App() {
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
-        <React.Suspense fallback={<div>Loading...</div>}>
+        <React.Suspense fallback={<div>Loading remote button...</div>}>
           <RemoteButton />
         </React.Suspense>
         <a
